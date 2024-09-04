@@ -98,6 +98,50 @@ const blogValidationSchema = Joi.object({
   ),
 });
 
+const blogUpdateValidationSchema = Joi.object({
+  title: Joi.string()
+    .trim()
+    .min(3)
+    .max(100)
+    .messages({
+      'string.min': 'Title should have a minimum length of {#limit} characters.',
+      'string.max': 'Title should have a maximum length of {#limit} characters.',
+    }),
+  content: Joi.string()
+    .trim()
+    .min(10)
+    .messages({
+      'string.min': 'Content should have a minimum length of {#limit} characters.',
+    }),
+  author: Joi.string()
+    .trim(),
+  tags: Joi.array()
+    .items(Joi.string().trim())
+    .messages({
+      'array.base': 'Tags should be an array of strings.',
+    }),
+  comments: Joi.array().items(
+    Joi.object({
+      user: Joi.string()
+        .trim()
+        .required()
+        .messages({
+          'string.empty': 'Comment user is required.',
+        }),
+      comment: Joi.string()
+        .trim()
+        .required()
+        .messages({
+          'string.empty': 'Comment content is required.',
+        }),
+      createdAt: Joi.date().default(Date.now),
+    })
+  ),
+});
+
 export const validateBlog = (blogData) => {
   return blogValidationSchema.validate(blogData, { abortEarly: false });
+};
+export const validateBlogUpdate = (blogData) => {
+  return blogUpdateValidationSchema.validate(blogData, { abortEarly: false });
 };
