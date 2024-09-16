@@ -5,7 +5,7 @@ import {object,string} from 'joi';
 
 /**
  * The object represents a common schema 
- * for admin, manager and employee by using
+ * for admin, manager and developer by using
  * Mongoose according to the business logic. 
  */
 const userSchema = new Schema({
@@ -52,15 +52,40 @@ const userSchema = new Schema({
         unique: true,
     },
     address: {
-        type: String,    
-        required:true,
-        maxLength: 80
+        country: {
+            type: String,
+            required: true,
+            maxLength: 50
+        },
+        state: {
+            type: String,
+            required: true,
+            maxLength: 50
+        },
+        city: {
+            type: String,
+            required: true,
+            maxLength: 50
+        },
+        streetAddress: {
+            type: String,
+            required: true,
+            maxLength: 100
+        },
+        postalCode: {
+            type: String,
+            required: true,
+            match: /^[0-9]+$/,
+            maxLength: 10
+        }
     },
     role :{
         type:String,
-        default:'employee',
-        enum:['employee', 'manager', 'admin']
+        default:'developer',
+        enum:['developer', 'manager', 'admin']
     }
+}, {
+    timestamps: true
 })
 
 userSchema.methods.generateAuthToken = function(){
@@ -112,17 +137,28 @@ function validateUser(user){
             .length(13)
             .pattern(/^[0-9]+$/)
             .required(), 
-        address: string()
-            .required()
-            .max(80),
+        address: object({
+            country: string()
+                .max(50)
+                .required(),
+            state: string()
+                .max(50)
+                .required(),
+            city: string()
+                .max(50)
+                .required(),
+            streetAddress: string()
+                .max(100)
+                .required(),
+            postalCode: string()
+                .pattern(/^[0-9]+$/)
+                .max(10)
+                .required()
+        }).required(),
         role: string()
     });
     return schema.validate(user);
 }
-
-
-
-
 
 export const User = new model("users", userSchema);
 export {validateUser};
