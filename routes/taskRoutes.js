@@ -1,6 +1,6 @@
 import express from 'express';
-import { auth, isManagerOrAdmin } from '../middleware/auth';
-import { Task, validateTask } from '../models/task';
+import { auth, isManagerOrAdmin, isDeveloper } from '../middlewares/auth.js';
+import { Task, validateTask } from '../models/taskModel.js';
 
 const taskRouter = express.Router();
 

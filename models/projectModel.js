@@ -1,5 +1,8 @@
 import { Schema, model } from "mongoose";
-import { object, string } from 'joi';
+import joi from 'joi';
+
+const {object, string} = joi;
+
 
 // Define the Project schema
 const projectSchema = new Schema({

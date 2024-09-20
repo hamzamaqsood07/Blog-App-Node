@@ -1,6 +1,6 @@
-import { auth, isManagerOrAdmin } from '../middleware/auth';
+import { auth, isManagerOrAdmin } from '../middlewares/auth.js';
 import express from 'express';
-import { Project, validateProject } from '../models/project';
+import { Project, validateProject } from '../models/projectModel.js';
 const projectRouter = express.Router();
 
 

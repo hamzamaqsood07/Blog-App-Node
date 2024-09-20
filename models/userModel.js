@@ -1,8 +1,11 @@
-import {pick} from 'lodash';
-import {sign} from 'jsonwebtoken';
+import lodash from 'lodash';
+import jsonwebtoken from 'jsonwebtoken';
 import {Schema,model} from "mongoose";
-import {object,string} from 'joi';
+import joi from 'joi';
 
+const {object, string} = joi;
+const {pick} = lodash;
+const {sign} = jsonwebtoken;
 /**
  * The object represents a common schema 
  * for admin, manager and developer by using

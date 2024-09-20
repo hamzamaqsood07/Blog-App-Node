@@ -1,6 +1,6 @@
 import { Router } from "express";
 import bcrypt from 'bcrypt';
-import { User, validateUser } from '../models/user';
+import { User, validateUser } from '../models/userModel.js';
 
 const authRouter = Router();
 //Signup routes

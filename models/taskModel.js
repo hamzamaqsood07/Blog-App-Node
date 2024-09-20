@@ -1,9 +1,11 @@
 import { Schema, model } from "mongoose";
-import { object, string } from 'joi';
+import joi from 'joi';
 
-// Define the Project schema
-const projectSchema = new Schema({
-    name: {
+const {object, string} = joi;
+
+// Define the Task schema
+const taskSchema = new Schema({
+    title: {
         type: String,
         required: true,
         maxlength: 50
@@ -18,33 +20,35 @@ const projectSchema = new Schema({
         ref: 'users', // references the User model
         required: true
     },
-    tasks: [{
-        type: Schema.Types.ObjectId,
-        ref: 'tasks' // references the Task model
-    }]
+    status:{
+        type: String,
+        enum: ["new", "in progress", 'completed'],
+        required: true,
+        default: "new"
+    },
 }, {
     timestamps: true
 });
 
 /**
- * The function validates project object by
+ * The function validates task object by
  * using Joi according to business rules.
- * @param {Object} project - project object to be validated
+ * @param {Object} task - task object to be validated
  * @returns an object having two properties: value and error
  */
-function validateProject(project) {
+function validateTask(task) {
     const schema = object({
-        name: string()
+        title: string()
             .max(50)
             .required(),
         description: string()
             .max(500),
         creator: string()
             .required(), // creator's ID is required
-        tasks: string().optional() // Task array references
+        status: string()
     });
-    return schema.validate(project);
+    return schema.validate(task);
 }
 
-export const Project = new model("projects", projectSchema);
-export { validateProject };
+export const Task = new model("tasks", taskSchema);
+export { validateTask };
