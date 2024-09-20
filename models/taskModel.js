@@ -12,10 +12,10 @@ const taskSchema = new Schema({
         type: String,
         maxlength: 500
     },
-    // Reference to the creator (manager)
-    creator: {
+    // Reference to the project
+    projectId: {
         type: Schema.Types.ObjectId,
-        ref: 'users', // references the User model
+        ref: 'projects', // references the User model
         required: true
     },
     status:{
@@ -41,8 +41,6 @@ function validateTask(task) {
             .required(),
         description: joi.string()
             .max(500),
-        creator: joi.string()
-            .required(), // creator's ID is required
         status: joi.string()
     });
     return schema.validate(task);

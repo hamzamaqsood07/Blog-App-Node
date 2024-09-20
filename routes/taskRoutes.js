@@ -5,7 +5,7 @@ import { Task, validateTask } from '../models/taskModel.js';
 const taskRouter = express.Router();
 
 // Manager creates a task for a project
-taskRouter.post('/api/tasks', [auth, isManagerOrAdmin], async (req, res) => {
+taskRouter.post('/', [auth, isManagerOrAdmin], async (req, res) => {
     const { error } = validateTask(req.body);
     if (error) return res.status(400).send(error.details[0].message);
     
@@ -15,7 +15,7 @@ taskRouter.post('/api/tasks', [auth, isManagerOrAdmin], async (req, res) => {
 });
 
 // Manager updates a task
-taskRouter.put('/api/tasks/:id', [auth, isManagerOrAdmin], async (req, res) => {
+taskRouter.put('/:id', [auth, isManagerOrAdmin], async (req, res) => {
     const { error } = validateTask(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
@@ -26,7 +26,7 @@ taskRouter.put('/api/tasks/:id', [auth, isManagerOrAdmin], async (req, res) => {
 });
 
 // Manager deletes a task
-taskRouter.delete('/api/tasks/:id', [auth, isManagerOrAdmin], async (req, res) => {
+taskRouter.delete('/:id', [auth, isManagerOrAdmin], async (req, res) => {
     const task = await Task.findByIdAndRemove(req.params.id);
     if (!task) return res.status(404).send('The task with the given ID was not found.');
 
@@ -34,7 +34,7 @@ taskRouter.delete('/api/tasks/:id', [auth, isManagerOrAdmin], async (req, res) =
 });
 
 // Developer can only update the status of a task
-taskRouter.patch('/api/tasks/:id/status', [auth, isDeveloper], async (req, res) => {
+taskRouter.patch('/:id/status', [auth, isDeveloper], async (req, res) => {
     const task = await Task.findById(req.params.id);
     if (!task) return res.status(404).send('The task with the given ID was not found.');
     

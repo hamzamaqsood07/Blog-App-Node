@@ -37,21 +37,12 @@ const userSchema = new Schema({
         required: true,
         match: /^[0-9]+$/,
         length: 10,
-        unique:true
     },
     countryCode: {
         type: String,
         required: true,
         match: /^\+[0-9]+$/,
         length: 5,
-        unique:true
-    },
-    cnic: {
-        type: String,
-        required: true,
-        match: /^[0-9]+$/,
-        length: 13,
-        unique: true,
     },
     address: {
         country: {
@@ -85,7 +76,13 @@ const userSchema = new Schema({
         type:String,
         default:'developer',
         enum:['developer', 'manager', 'admin']
-    }
+    },
+    // Reference to the creator (admin)
+    creator: {
+        type: Schema.Types.ObjectId,
+        ref: 'users', // references the User model itself
+        required: false
+    },
 }, {
     timestamps: true
 })
@@ -103,7 +100,7 @@ userSchema.methods.generateAuthToken = function(){
  * @returns an object having two properties;
  * value and error
  */
-function validateUser(user){
+function validateUser(user, isUpdate=false){
     const schema = joi.object({
         firstName: joi.string()
             .max(20)
@@ -117,7 +114,11 @@ function validateUser(user){
         password: joi.string()
             .min(8)
             .max(30)
-            .required()
+            .when('$isUpdate', {
+                is: false, // When isUpdate is false, password is required
+                then: joi.required(),
+                otherwise: joi.optional(),
+            })
             .regex(/[A-Z]/, 'uppercase letter')
             .regex(/[0-9]/, 'number')
             .regex(/[!@#$%^&*]/, 'special character')
@@ -136,10 +137,6 @@ function validateUser(user){
             .min(2)
             .pattern(/^\+[0-9]+$/)
             .required(),
-        cnic: joi.string()
-            .length(13)
-            .pattern(/^[0-9]+$/)
-            .required(), 
         address: joi.object({
             country: joi.string()
                 .max(50)

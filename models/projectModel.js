@@ -39,8 +39,6 @@ function validateProject(project) {
             .required(),
         description: joi.string()
             .max(500),
-        creator: joi.string()
-            .required(), // creator's ID is required
         tasks: joi.string().optional() // Task array references
     });
     return schema.validate(project);
