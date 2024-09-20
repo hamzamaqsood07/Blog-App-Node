@@ -1,8 +1,6 @@
 import { Schema, model } from "mongoose";
 import joi from 'joi';
 
-const {object, string} = joi;
-
 // Define the Task schema
 const taskSchema = new Schema({
     title: {
@@ -37,15 +35,15 @@ const taskSchema = new Schema({
  * @returns an object having two properties: value and error
  */
 function validateTask(task) {
-    const schema = object({
-        title: string()
+    const schema = joi.object({
+        title: joi.string()
             .max(50)
             .required(),
-        description: string()
+        description: joi.string()
             .max(500),
-        creator: string()
+        creator: joi.string()
             .required(), // creator's ID is required
-        status: string()
+        status: joi.string()
     });
     return schema.validate(task);
 }

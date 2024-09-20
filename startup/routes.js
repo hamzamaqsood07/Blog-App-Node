@@ -7,7 +7,7 @@ import userRouter from '../routes/userRoutes.js';
 import weatherRouter from '../routes/weather.js';
 
 const defineRoutes = app => {
-    app.use('/', authRouter);
+    app.use('/auth', authRouter);
     app.use('/blogs', blogRouter);
     app.use('/products', productRouter);
     app.use('/projects', projectRouter);

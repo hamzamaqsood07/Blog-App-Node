@@ -3,7 +3,6 @@ import jsonwebtoken from 'jsonwebtoken';
 import {Schema,model} from "mongoose";
 import joi from 'joi';
 
-const {object, string} = joi;
 const {pick} = lodash;
 const {sign} = jsonwebtoken;
 /**
@@ -105,17 +104,17 @@ userSchema.methods.generateAuthToken = function(){
  * value and error
  */
 function validateUser(user){
-    const schema = object({
-        firstName: string()
+    const schema = joi.object({
+        firstName: joi.string()
             .max(20)
             .required(),
-        lastName: string()
+        lastName: joi.string()
             .max(20).
             required(),
-        email: string()
+        email: joi.string()
             .email()
             .required(),
-        password: string()
+        password: joi.string()
             .min(8)
             .max(30)
             .required()
@@ -128,37 +127,38 @@ function validateUser(user){
             'string.pattern.name': 'Password must contain at least one {#name}',
             'any.required': 'Password is required',
             }),
-        phone: string()
+        phone: joi.string()
             .length(10)
             .pattern(/^[0-9]+$/)
             .required(),
-        countryCode: string()
-            .length(5)
+        countryCode: joi.string()
+            .max(5)
+            .min(2)
             .pattern(/^\+[0-9]+$/)
             .required(),
-        cnic: string()
+        cnic: joi.string()
             .length(13)
             .pattern(/^[0-9]+$/)
             .required(), 
-        address: object({
-            country: string()
+        address: joi.object({
+            country: joi.string()
                 .max(50)
                 .required(),
-            state: string()
+            state: joi.string()
                 .max(50)
                 .required(),
-            city: string()
+            city: joi.string()
                 .max(50)
                 .required(),
-            streetAddress: string()
+            streetAddress: joi.string()
                 .max(100)
                 .required(),
-            postalCode: string()
+            postalCode: joi.string()
                 .pattern(/^[0-9]+$/)
                 .max(10)
                 .required()
         }).required(),
-        role: string()
+        role: joi.string()
     });
     return schema.validate(user);
 }

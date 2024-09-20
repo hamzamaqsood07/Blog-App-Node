@@ -1,9 +1,6 @@
 import { Schema, model } from "mongoose";
 import joi from 'joi';
 
-const {object, string} = joi;
-
-
 // Define the Project schema
 const projectSchema = new Schema({
     name: {
@@ -36,15 +33,15 @@ const projectSchema = new Schema({
  * @returns an object having two properties: value and error
  */
 function validateProject(project) {
-    const schema = object({
-        name: string()
+    const schema = joi.object({
+        name: joi.string()
             .max(50)
             .required(),
-        description: string()
+        description: joi.string()
             .max(500),
-        creator: string()
+        creator: joi.string()
             .required(), // creator's ID is required
-        tasks: string().optional() // Task array references
+        tasks: joi.string().optional() // Task array references
     });
     return schema.validate(project);
 }
